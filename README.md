@@ -94,7 +94,9 @@ Save it. Now click Edit bucket policy and paste this, REPLACE THE BUCKET NAME WI
 Enjoy, this took me a long time to figure out and I'm sharing it so that nobody has to go through all that.
 
 ## Credits
-Forked from original work done by Lepozepo/S3
+
+Forked from digilord/Meteor-S3-Progress
+.. Forked from original work done by Lepozepo/S3
 
 ## Donating
 By donating you are supporting this package and its developer so that he may continue to bring you updates to this and other software he maintains.
@@ -103,3 +105,6 @@ By donating you are supporting this package and its developer so that he may con
 
 [gittip-badge]: https://rawgithub.com/digilord/gittip-badge/master/dist/gittip.png
 [digilord]: https://www.gittip.com/digilord/
+=======
+s3-progress
+===========
