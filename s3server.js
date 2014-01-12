@@ -11,11 +11,13 @@ Meteor.publish('s3files', function(){
 });
 
 Meteor.methods({
-  S3config:function(obj){
+  S3config: function(obj){
+    check(obj, Object)
     knox = Knox.createClient(obj);
     S3 = {directory:obj.directory || "/"};
   },
   S3upload:function(options){
+    check(options, Match.Any)
     var file = options.file;
     var context = options.context;
     var callback = options.callback;
@@ -25,7 +27,7 @@ Meteor.methods({
       chunkSize: 2048     // in bytes.
     });
 
-    console.log('Calling S3upload');
+    console.log('Calling S3upload', options);
     var future = new Future();
 
     S3files.upsert({file_name: file.name},{
@@ -72,6 +74,8 @@ Meteor.methods({
     }
   },
   S3delete:function(file_id, callback){
+    check(file_id, String)
+    check(callback, Match.Any)
     var file = S3files.findOne({_id: file_id});
     var path = file.user + "/" + file.file_name;
     S3files.remove({_id: file_id});
@@ -84,6 +88,7 @@ Meteor.methods({
     });
   },
   S3list: function(path){
+    check(path, String);
     var future = new Future();
     knox.list({prefix: path}, function(err, data){
       if(err)

@@ -178,16 +178,13 @@ Template.s3list_all.events({
     });
 
     if(checked_files.length > 0){
-      bootbox.confirm("You are about to remove "+ checked_files.length + " files.  This CANNOT BE UNDONE!", function(confirmed) {
-        if(confirmed){
+      var r = confirm("You are about to remove "+ checked_files.length + " files. This CANNOT BE UNDONE!");
+      if (r){
           _.each(checked_files, function(file){
             Meteor.call('S3delete', file)
           })
-
-          // Do something
         }
-      });
-    }
+      };
   },
   'click .selected-file': function (event, template) {
     template.find('.s3-check-all-files').checked = false;
