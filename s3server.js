@@ -27,7 +27,7 @@ Meteor.methods({
       chunkSize: 2048     // in bytes.
     });
 
-    console.log('Calling S3upload', options);
+    console.log('Calling S3upload');
     var future = new Future();
 
     S3files.upsert({file_name: file.name},{
