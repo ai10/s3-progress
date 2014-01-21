@@ -1,46 +1,35 @@
-Handlebars.registerHelper('S3', function (options) {
-  var uploadOptions = options.hash;
-  var template = options.fn;
-  var callback = uploadOptions.callback;
-  var path = uploadOptions.path;
-  var context = this;
-
-  if (!template) return;
-
-  var html;
-  html = Spark.isolate(function(){
-    return template();
-  });
-
-  html = Spark.attachEvents({
-    'change input[type=file]': function (event,template) {
-      var files = event.currentTarget.files;
-      _.each(files,function(file){
-        var reader = new FileReader;
-        var fileData = {
-          name:file.name,
-          size:file.size,
-          type:file.type
-        };
-
-        reader.onload = function (e) {
-          if(e){
-            console.log(e)
-          }
-          fileData.data = new Uint8Array(reader.result);
-          fileData.originalName = fileData.name;
-          var extension = (fileData.name).match(/\.[0-9a-z]{1,5}$/i);
-          fileData.name = Meteor.uuid()+extension;
-          options = {};
-          options.file = fileData;
-          options.context = context;
-          options.callback = callback;
-          if(path != null){
-            options.path = path;
-          }
-          Session.set('s3-file-name', fileData.name)
-          Meteor.call("S3upload", options)
-        };
+Template.s3_upload.events({
+   'change input[type=file]': function (e, t) {
+       e.preventDefault();
+       var context = this;
+       var callback = null;
+       var path = 'learnultra';
+       var files = event.currentTarget.files;
+       _.each(files,function(file){
+           var reader = new FileReader;
+           var fileData = {
+               name:file.name,
+               size:file.size,
+               type:file.type
+               };
+           reader.onload = function (e) {
+              if(e){
+                    console.log(e)
+              }
+              fileData.data = new Uint8Array(reader.result);
+              fileData.originalName = fileData.name;
+              var extension = (fileData.name).match(/\.[0-9a-z]{1,5}$/i);
+              fileData.name = Meteor.uuid()+extension;
+              options = {};
+              options.file = fileData;
+              options.context = context;
+              options.callback = callback;
+              if(path != null){
+                options.path = path;
+              }
+           Session.set('s3-file-name', fileData.name)
+           Meteor.call("S3upload", options)
+           };
 
         reader.readAsArrayBuffer(file);
 
@@ -49,9 +38,6 @@ Handlebars.registerHelper('S3', function (options) {
     'click .s3-file-upload-button': function(e) {
       $('.s3-file-upload').click();
     }
-  },html);
-
-  return html;
 });
 
 Meteor.subscribe('s3files');
